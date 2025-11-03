@@ -11,14 +11,9 @@ services:
       - ./:/app
     ports:
       - "8000:8000"
-    environment:
-      # Database connection; consider moving secrets to a .env file for safety
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=example
-      - DATABASE_NAME=calculator
-      - DATABASE_URL=postgresql://postgres:example@db:5432/calculator
+    # Load environment variables (secrets/config) from .env in the project root
+    env_file:
+      - .env
     depends_on:
       - db
     networks:
@@ -28,16 +23,15 @@ services:
     image: postgres:15
     container_name: postgres-db
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: example
-      POSTGRES_DB: calculator
+    # Load DB credentials from .env
+    env_file:
+      - .env
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "calculator"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -48,9 +42,9 @@ services:
     image: dpage/pgadmin4:7
     container_name: pgadmin
     restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+    # Load pgAdmin credentials from .env
+    env_file:
+      - .env
     ports:
       - "8080:80"
     volumes:
