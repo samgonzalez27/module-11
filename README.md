@@ -132,5 +132,55 @@ Run tests locally:
 pytest -q
 ```
 
+Submission / Assignment checklist
+-------------------------------
+
+Please include the following in your submission (update this README before submitting):
+
+- **GitHub Repository Link**: the URL of this repository (must contain your own code).
+- **Docker Hub Repository**: add the link to the Docker Hub repository where your image is pushed (replace the placeholder below):
+
+```
+docker.io/<your-dockerhub-username>/<repo-name>:<tag>
+```
+
+- **Screenshots required**:
+	- **GitHub Actions Workflow**: a screenshot showing a successful workflow run in the repository's **Actions** tab (show the green check and the run details).
+	- **Docker Hub Deployment**: a screenshot showing the pushed image/tag on your Docker Hub repository page (show the repository name and the pushed tag).
+
+Helpful commands and notes to produce the screenshots
+--------------------------------------------------
+
+- Build and push locally (option A — push from your machine):
+
+```bash
+# log in to Docker Hub (follow the prompt)
+docker login
+
+# build the image (run from project root)
+docker build -t <your-dockerhub-username>/<repo-name>:<tag> .
+
+# push the image to Docker Hub
+docker push <your-dockerhub-username>/<repo-name>:<tag>
+```
+
+After pushing, open https://hub.docker.com/r/<your-dockerhub-username>/<repo-name> and take the Docker Hub screenshot.
+
+- Push via GitHub Actions (option B — CI-driven push):
+
+1. Add the following repository secrets in GitHub (Settings → Secrets → Actions):
+	 - `DOCKERHUB_USERNAME` — your Docker Hub username
+	 - `DOCKERHUB_TOKEN` — a Docker Hub access token or password
+
+2. Trigger the workflow by pushing a commit or re-running the action in the Actions tab. When a run completes successfully, take the GitHub Actions screenshot.
+
+Notes & grading tips
+-------------------
+- If you push locally, include the Docker Hub link in this README and provide the Docker Hub screenshot.
+- If you use GitHub Actions to push, include the GitHub Actions screenshot showing the successful `docker push` step and the Docker Hub screenshot showing the new tag.
+- A screenshot of Docker Desktop alone is not sufficient for the Docker Hub Deployment requirement — the grader expects to see the image on Docker Hub.
+
+If you want, I can prepare the exact `docker build` and `docker push` command to run locally, or I can help you configure the GitHub Actions secrets and re-run the workflow. Tell me which option you prefer and I'll continue.
+
 License / notes
 - This project is for educational purposes. Keep secrets out of source control and use stronger passwords for anything beyond local development.
