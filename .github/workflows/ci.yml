@@ -40,8 +40,11 @@ jobs:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
 
-      - name: Install dependencies
+      - name: Install system packages and Python dependencies
         run: |
+          # Install system deps required to build psycopg2 if a wheel is not available
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev gcc
           python -m venv .venv
           source .venv/bin/activate
           pip install --upgrade pip
