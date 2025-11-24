@@ -12,6 +12,11 @@ from __future__ import annotations
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
 from pydantic import ConfigDict
+from typing import Literal
+
+
+# allowed operation types for calculations
+CalcType = Literal["add", "subtract", "multiply", "divide"]
 
 
 class UserCreate(BaseModel):
@@ -38,4 +43,25 @@ class UserRead(BaseModel):
     created_at: datetime | None = None
 
     # enable ORM-style population (Pydantic v2)
+    model_config = ConfigDict(from_attributes=True)
+
+
+
+class CalculationCreate(BaseModel):
+    """Schema for creating a Calculation."""
+
+    a: float
+    b: float
+    type: CalcType
+
+
+class CalculationRead(BaseModel):
+    """Schema for reading Calculation objects from ORM."""
+
+    id: int
+    a: float
+    b: float
+    type: CalcType
+    result: float | None = None
+
     model_config = ConfigDict(from_attributes=True)
