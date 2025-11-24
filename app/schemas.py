@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
-from pydantic import ConfigDict, field_validator
+from pydantic import ConfigDict, field_validator, model_validator
 from typing import Literal
 
 
@@ -71,6 +71,13 @@ class CalculationCreate(BaseModel):
         if low not in ("add", "subtract", "multiply", "divide"):
             raise ValueError(f"unsupported calculation type: {v!r}")
         return low
+
+    @model_validator(mode="after")
+    def check_division_by_zero(self):
+        # `type` has already been normalized by the field validator above
+        if self.type == "divide" and self.b == 0:
+            raise ValueError("division by zero is not allowed in request")
+        return self
 
 
 class CalculationRead(BaseModel):
